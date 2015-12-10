@@ -1,0 +1,175 @@
+-	var DEV = false;
+-	var PHPMINIFIER = false;
+//-	var css='./css/bootstrap.min.css'; //- LocalMinified - mini bootsrtam-curstomized modals-only
+//-	var css='./css/bootstrap.css'; //- LocalFulldev - bootstrap-customized only with modals 
+//-	var css='http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'; //-CDN
+//-	var css='/min/?f=./css/bootstrap.min.css'; //-phpminify
+//- -------------
+//- Javascript - LocalFullDev
+//-change localhost:8080 with the adress of your nodejs server (as in ./js/config.js)
+//-jquery 1.11.0 full dev mod
+//-bootstrap jquery's mod, customized with bootstrap-modals only.
+//-config.js and client.js
+//-	var javascript=['./js/socket.io.js', './js/jquery-1.11.0.js', './js/bootstrap.js','./js/config.js','./js/client.js'];
+//-Javascript - LocalMinified
+//-include jquery 1.11, bootstrap-modals, socket.io 0.9.10, client.js
+//-	var javascript=['./js/config.js','./js/allinone.min.js'];
+//-Javascript - CDN
+//-jquery 1.11.0 cdn
+//-socket.io 0.9.10 cdn from cdnjs.com
+//-bootstrap js full from bootstrapcdn.com
+//-client.min.js and config.js
+//- -	var javascript=['http://code.jquery.com/jquery-1.11.0.min.js','http://cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js','http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js','./js/config.js','./js/client.min.js'];
+//-Javascript - phpminify
+//-like localMinified, but the php minifier (allows to gzip/deflate)
+//-	var javascript=['./min/?f=./js/config.js,./js/allinone.min.js'];
+
+doctype html
+html(style="height:100%")
+	head
+		meta(http-equiv="content-type",content="text/html;charset=utf-8")
+		meta(name="viewport",content="width=device-width, initial-scale=1.0")
+		title Romein's Test chat
+		//-BOOTSTRAP 3 Style (inline)
+		//-link(href=css, rel="stylesheet")
+		//-if !DEV
+		link(href="css/bootstrap.min.css", rel="stylesheet")
+		//-else
+		//-	style(type="text/css")
+		//-		include css/bootstrap.inline.min.css
+		//-		include css/bootstrap-theme.min.css
+		
+		link(rel="shortcut icon",sizes="16x16",href="./img/faviconitbis/favicon.ico")
+		link(rel="shortcut icon",type="image/x-icon",href="./img/faviconitbis/favicon.ico")
+		//- For Opera Speed Dial
+		//- link(rel="icon",type="image/png",sizes="195x195",href="./img/faviconitbis/favicon-195.png")
+		//- For iPad with high-resolution Retina display running iOS ≥ 7 
+		link(rel="apple-touch-icon",sizes="152x152",href="./img/faviconitbis/favicon-152.png")
+		link(rel="icon",sizes="152x152",href="./img/faviconitbis/favicon-152.png")
+		//- For iPad with high-resolution Retina display running iOS ≤ 6
+		//- link(rel="apple-touch-icon",sizes="144x144",href="./img/faviconitbis/favicon-144.png")
+		//- For iPhone with high-resolution Retina display running iOS ≥ 7
+		//- link(rel="apple-touch-icon",sizes="120x120",href="./img/faviconitbis/favicon-120.png")
+		//- For iPhone with high-resolution Retina display running iOS ≤ 6
+		//- link(rel="apple-touch-icon",sizes="114x114",href="./img/faviconitbis/favicon-114.png")
+		//- For Google TV devices
+		//- link(rel="icon",type="image/png",sizes="96x96",href="./img/faviconitbis/favicon-96.png")
+		//- For iPad Mini
+		//- link(rel="apple-touch-icon",sizes="76x76",href="./img/faviconitbis/favicon-76.png")
+		//- For first- and second-generation iPad
+		//- link(rel="apple-touch-icon",sizes="72x72",href="./img/faviconitbis/favicon-72.png")
+		//- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices
+		//- link(rel="apple-touch-icon",href="./img/faviconitbis/favicon-57.png")
+		//- Windows 8 Tiles 
+		meta(name="msapplication-TileColor",content="#FFFFFF")
+		meta(name="msapplication-TileImage",content="./img/faviconitbis/favicon-144.png")
+
+	body(style="height:100%")
+		//-Container
+		div.container#container(style="padding-bottom:50px;")
+			//-Connection background
+			div#connection.row(style="padding-top:50px;")
+				div.col-xs-12.col-sm-12.col-md-8.col-md-offset-2.col-lg-6.col-lg-offset-3
+					div.progress.active
+						div.progress-bar.progress-bar-info.progress-bar-striped.active(role="progressbar",aria-valuenow="1",aria-valuemin="0",aria-valuemax="100",style="width:1%")
+						//-role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"
+							span.sr-only Connecting ...
+					p.text-center.text-muted Connecting...
+			
+			//-Login
+			div#login.modal.fade
+				div.modal-dialog
+					div.modal-content
+						div.modal-header
+							h3.modal-title 
+								i.glyphicon.glyphicon-user
+								|  
+								| What's your name ?
+						div.modal-body
+							form#loginform(accept-charset="UTF-8",onsubmit="return false;")
+								fieldset
+									div.form-group
+										input.form-control#pseudo(required=true,placeholder="Pseudonyme",name="pseudo",type="text")
+									button#loginvalid.btn.btn-lg.btn-success.btn-block(type="button") Log in
+			//-Reconnection div
+			div#reconnection.modal.fade
+				div.modal-dialog.modal-sm
+					div.modal-content
+						div.modal-header
+							h3.modal-title.text-warning
+								i.glyphicon.glyphicon-link  
+								|  
+								| Reconnection...
+						div.modal-body
+							p Trying to reconnect...
+							div.progress.active
+								div.progress-bar.progress-bar-warning.progress-bar-striped.active(role="progressbar",aria-valuenow="20",aria-valuemin="0",aria-valuemax="20",style="width:100%")
+								
+			//-Error div
+			div#error.modal.fade
+				div.modal-dialog
+					div.modal-content
+						div.modal-header.text-danger
+							h3.modal-title.text-danger
+								i.glyphicon.glyphicon-ban-circle  
+								|  
+								| Connection Error
+						div.modal-body
+							div.alert.alert-danger
+								p
+									strong Timeout 
+									| Connection to nodejs server timed out. Unable to contact the server.
+								p Check your internet connection and try to refresh this page later.
+							button.btn.btn-primary.btn-block.btn-lg(onclick="history.go(0)")
+								i.glyphicon.glyphicon-refresh
+								|  
+								| Refresh
+			div.chat.hide
+				div
+					div
+						div.row
+							div.col-sm-3
+								h3 Channels
+								div.list-group#rooms
+								ul.list-group
+									li.list-group-item
+										a#addchannelbtn(href="#") Add a public channel
+									li.list-group-item
+										a#joinchannel(href="#") Join a private channel
+							div.col-sm-9
+								h2 Chat 
+									a.btn.btn-xs.btn-default.pull-right#clear
+										span.glyphicon.glyphicon-trash
+										|  
+										| Clear
+								dl.dl-horizontal#conversation
+
+		div(style="position:fixed;bottom:10px;width:100%;").chat.hide
+			div.container
+				div.row
+					div.col-sm-9.col-sm-offset-3
+						div.input-group
+							span.input-group-addon
+								i.glyphicon.glyphicon-comment
+							input.form-control(placeholder="Type your text here...")#data
+							span.input-group-btn
+								button#datasend.btn.btn-primary.btn
+									i.glyphicon.glyphicon-transfer
+								button.btn#sendpicture
+									i.glyphicon.glyphicon-picture
+
+		if DEV
+			script(src="js/jquery-1.11.0.js")
+			script(src="/socket.io/socket.io.js")
+			script(src="js/config.js")
+			script(src="js/client.js")
+			script(src="js/bootstrap.js",async)
+		else
+			if PHPMINIFIER
+				script(src="/min/?f=js/jquery-1.11.0.js,js/socket.io.js,js/bootstrap.js,js/config.js,js/client.js",async)
+			else
+				script(src="js/allinone.jade",async)
+		//-END of document
+//-		each source in javascript
+//-			script(src=source)
+
